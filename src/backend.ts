@@ -26,7 +26,7 @@ export class Backend {
 		if (region) {
 			if (region == "dev") {
 				this.baseURL = "http://localhost:8099";
-			} else if region.indexOf(".") {
+			} else if (region.length > 3) {
 				// for self-hosted base URL
 				this.baseURL = region;
 			} else {
@@ -158,7 +158,7 @@ export class Backend {
 
 	async sudoQuery(rootToken: string, repo: string, filters, param?: ListParam) {
 		const qs = this.listParamToQuerystring(param);
-		return await this.req(token, "POST", `/sudoquery/${repo}${qs}`, filters);
+		return await this.req(rootToken, "POST", `/sudoquery/${repo}${qs}`, filters);
 	}
 
 	async increase(token: string, repo: string, id: string, field: string, n: number) {
