@@ -166,7 +166,7 @@ export class Backend {
 		return await this.req(token, "PUT", `/inc/${repo}/${id}`, body);
 	}
 
-	async storeFile(token: string, size: number, buf: ArrayBuffer) {
+	async storeFile(token: string, buf: ArrayBuffer) {
 		let fd = new formData();
 		fd.append("file", buf, {
 			contentType: "application/octect-stream",
@@ -183,6 +183,18 @@ export class Backend {
 
 	async sendMail(rootToken: string, data: EmailData) {
 		return await this.req(rootToken, "POST", "/sudo/sendmail", data);
+	}
+
+	async resizeImage(token: string, maxWidth: number, buf: ArrayBuffer) {
+		let fd = new formData();
+		fd.append("file", buf, {
+			contentType: "application/octect-stream",
+			filename: "file-upload"
+		});
+		fd.append("width", maxWidth);
+
+		const ct = `multipart/form-data; boundary=${fd.getBoundary()}`;
+		return await this.rawreq(ct, token, "POST", "/extra/resizeimg", fd);
 	}
 
 	private listParamToQuerystring(param?: ListParam): string {
