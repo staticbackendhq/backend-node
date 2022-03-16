@@ -16,6 +16,20 @@ export interface EmailData {
 	replyTo: string;
 }
 
+export interface ConvertData {
+	toPDF: boolean;
+	url: string;
+	fullpage: boolean;
+}
+
+export interface SMSData {
+	accountSID: string;
+	authToken: string;
+	toNumber: string;
+	fromNumber: string;
+	body: string;
+}
+
 export class Backend {
 	private baseURL: string = "https://na1.staticbackend.com";
 	private pubKey: string = "";
@@ -166,6 +180,11 @@ export class Backend {
 		return await this.req(token, "PUT", `/inc/${repo}/${id}`, body);
 	}
 
+	async sudoAddIndex(rootToken: string, repo: string, field: string) {
+		const qs = `?col=${repo}&field=${field}`;
+		return await this.req(rootToken, "POST", `/sudo/index${qs}`, null);
+	}
+
 	async storeFile(token: string, buf: ArrayBuffer) {
 		let fd = new formData();
 		fd.append("file", buf, {
@@ -195,6 +214,14 @@ export class Backend {
 
 		const ct = `multipart/form-data; boundary=${fd.getBoundary()}`;
 		return await this.rawreq(ct, token, "POST", "/extra/resizeimg", fd);
+	}
+
+	async convertURLToX(token: string, data: ConvertData) {
+		return await this.req(token, "POST", "/extra/htmltox", data);
+	}
+
+	async sudoSendSMS(rootToken: string, data: SMSData) {
+		return await this.req(rootToken, "POST", "/extra/sms", data);
 	}
 
 	private listParamToQuerystring(param?: ListParam): string {
