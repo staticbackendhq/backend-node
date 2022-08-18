@@ -7,6 +7,11 @@ export interface ListParam {
 	descending: boolean;
 }
 
+export interface BulkUpdate {
+	update: any;
+	clauses: Array<Array<any>>;
+}
+
 export interface EmailData {
 	fromName: string;
 	from: string;
@@ -151,6 +156,10 @@ export class Backend {
 
 	async update(token: string, repo: string, id: string, doc) {
 		return await this.req(token, "PUT", `/db/${repo}/${id}`, doc)
+	}
+
+	async updateBulk(token: string, repo: string, data: BulkUpdate) {
+		return await this.req(token, "PUT", `/db/${repo}?bulk=1`, data);
 	}
 
 	async delete(token: string, repo: string, id: string) {
