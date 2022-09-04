@@ -123,6 +123,10 @@ export class Backend {
 		return await this.req(rootToken, "GET", `/sudogettoken/${accountId}`);
 	}
 
+	async me(token: string) {
+		return await this.req(token, "GET", "/me");
+	}
+
 	async cacheGet(rootToken: string, key: string) {
 		return await this.req(rootToken, "GET", `/sudo/cache?key=${key}`);
 	}
