@@ -170,6 +170,10 @@ export class Backend {
 		return await this.req(token, "DELETE", `/db/${repo}/${id}`);
 	}
 
+	async count(token: string, repo: string, filters) {
+		return await this.req(token, "POST", `/db/count/${repo}`, filters);
+	}
+
 	async sudoList(rootToken: string, repo: string, param?: ListParam) {
 		const qs = this.listParamToQuerystring(param);
 		return await this.req(rootToken, "GET", `/sudo/${repo}${qs}`);
