@@ -138,6 +138,19 @@ export class Backend {
     return await this.req(token, "GET", "/me");
   }
 
+  async addUser(token: string, email: string, password: string) {
+    const body = { email: email, password: password };
+    return await this.req(token, "POST", "/account/users", body);
+  }
+
+  async removeUser(token: string, userId: string) {
+    return await this.req(token, "DELETE", `/account/users/${userId}`);
+  }
+
+  async users(token: string) {
+    return await this.req(token, "GET", "/account/users");
+  }
+
   async cacheGet(rootToken: string, key: string) {
     return await this.req(rootToken, "GET", `/sudo/cache?key=${key}`);
   }
