@@ -282,6 +282,15 @@ export class Backend {
     return await this.req(token, "POST", "/extra/htmltox", data);
   }
 
+  async publish(token: string, channel: string, type: string, data: any) {
+    const payload = {
+      channel: channel,
+      type: type,
+      data: data,
+    };
+    return await this.req(token, "POST", "/publish", payload);
+  }
+
   async sudoSendSMS(rootToken: string, data: SMSData) {
     return await this.req(rootToken, "POST", "/extra/sms", data);
   }
