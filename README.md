@@ -48,3 +48,31 @@ For `login` and `register` the `content` field contains the user's session `toke
 
 You'll need this token for all your interaction with the backend.
 
+## Development
+
+### Building
+
+```bash
+npm run build
+```
+
+### Testing
+
+This library includes a comprehensive test suite that mirrors the Go client tests.
+
+**Prerequisites:**
+- StaticBackend server running in development mode at `http://localhost:8099`
+- Default admin account: `admin@dev.com` / `devpw1234`
+
+**Run tests:**
+```bash
+npm test
+```
+
+**Run tests in watch mode:**
+```bash
+npm test:watch
+```
+
+See [tests/README.md](tests/README.md) for detailed testing documentation.
+
