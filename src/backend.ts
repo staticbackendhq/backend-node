@@ -1,6 +1,10 @@
 import * as fetch from "node-fetch";
 import * as formData from "form-data";
 
+export type Operator = "==" | "!=" | "<" | "<=" | ">" | ">=" | "in" | "!in";
+
+export type Filter = [string, Operator, any];
+
 export interface ListParam {
   page: number;
   size: number;
@@ -36,7 +40,7 @@ export interface SMSData {
 }
 
 export class Backend {
-  private baseURL: string = "https://na1.staticbackend.com";
+  private baseURL: string = "https://na1.staticbackend.dev";
   private pubKey: string = "";
 
   constructor(key: string, region: string) {
@@ -49,7 +53,7 @@ export class Backend {
         // for self-hosted base URL
         this.baseURL = region;
       } else {
-        this.baseURL = `https://${region}.staticbackend.com`;
+        this.baseURL = `https://${region}.staticbackend.dev`;
       }
     }
   }
@@ -59,7 +63,7 @@ export class Backend {
     token: string,
     method: string,
     path: string,
-    body?: any
+    body?: any,
   ) {
     try {
       let rawBody = null;
@@ -114,7 +118,7 @@ export class Backend {
     token: string,
     email: string,
     oldPass: string,
-    newPass: string
+    newPass: string,
   ) {
     const body = { email: email, oldPassword: oldPass, newPassword: newPass };
     return await this.req(token, "POST", "/user/changepw", body);
@@ -177,7 +181,16 @@ export class Backend {
     return await this.req(token, "GET", `/db/${repo}/${id}`);
   }
 
-  async query(token: string, repo: string, filters, param?: ListParam) {
+  async getByIds(token: string, repo: string, ids: string[]) {
+    return await this.req(token, "POST", `/db/${repo}?ids=true`, ids);
+  }
+
+  async query(
+    token: string,
+    repo: string,
+    filters: Filter[],
+    param?: ListParam,
+  ) {
     const qs = this.listParamToQuerystring(param);
     return await this.req(token, "POST", `/query/${repo}${qs}`, filters);
   }
@@ -194,12 +207,12 @@ export class Backend {
     return await this.req(token, "DELETE", `/db/${repo}/${id}`);
   }
 
-  async deleteBulk(token: string, repo: string, filters) {
+  async deleteBulk(token: string, repo: string, filters: Filter[]) {
     const x = Buffer.from(JSON.stringify(filters)).toString("base64");
     return await this.req(token, "DELETE", `/db/${repo}?bulk=1&x=${x}`);
   }
 
-  async count(token: string, repo: string, filters) {
+  async count(token: string, repo: string, filters: Filter[]) {
     return await this.req(token, "POST", `/db/count/${repo}`, filters);
   }
 
@@ -217,17 +230,26 @@ export class Backend {
     return await this.req(rootToken, "GET", `/sudo/${repo}/${id}`);
   }
 
+  async sudoGetByIds(token: string, repo: string, ids: string[]) {
+    return await this.req(token, "POST", `/sudo/${repo}?ids=true`, ids);
+  }
+
   async sudoUpdate(rootToken: string, repo: string, id: string, doc) {
     return await this.req(rootToken, "PUT", `/sudo/${repo}/${id}`, doc);
   }
 
-  async sudoQuery(rootToken: string, repo: string, filters, param?: ListParam) {
+  async sudoQuery(
+    rootToken: string,
+    repo: string,
+    filters: Filter[],
+    param?: ListParam,
+  ) {
     const qs = this.listParamToQuerystring(param);
     return await this.req(
       rootToken,
       "POST",
       `/sudoquery/${repo}${qs}`,
-      filters
+      filters,
     );
   }
 
@@ -236,7 +258,7 @@ export class Backend {
     repo: string,
     id: string,
     field: string,
-    n: number
+    n: number,
   ) {
     const body = { field: field, range: n };
     return await this.req(token, "PUT", `/inc/${repo}/${id}`, body);

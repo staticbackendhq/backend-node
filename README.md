@@ -1,5 +1,5 @@
 # backend-node
-Node client library for [StaticBackend](https://staticbackend.com)'s API.
+Node client library for [StaticBackend](https://staticbackend.dev)'s API.
 
 ## Install
 
@@ -10,7 +10,7 @@ $> npm i @staticbackend/backend
 ## Usage
 
 You'll need a public key to use this library. Please refer to our 
-[getting started guide](https://staticbackend.com/getting-started/) to help you get up and running.
+[getting started guide](https://staticbackend.dev/getting-started/) to help you get up and running.
 
 ### Importing and creating an instance
 
