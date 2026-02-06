@@ -3,6 +3,12 @@
 		"module": "commonjs",
 		"target": "es2015",
 		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"moduleResolution": "node",
+		"rootDir": "./src",
 		"outDir": "./dist"
 	},
 	"include": [

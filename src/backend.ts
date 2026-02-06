@@ -1,5 +1,5 @@
-import * as fetch from "node-fetch";
-import * as formData from "form-data";
+import fetch from "node-fetch";
+import FormData from "form-data";
 
 export type Operator = "==" | "!=" | "<" | "<=" | ">" | ">=" | "in" | "!in";
 
@@ -270,7 +270,7 @@ export class Backend {
   }
 
   async storeFile(token: string, buf: ArrayBuffer) {
-    let fd = new formData();
+    let fd = new FormData();
     fd.append("file", buf, {
       contentType: "application/octect-stream",
       filename: "file-upload",
@@ -289,7 +289,7 @@ export class Backend {
   }
 
   async resizeImage(token: string, maxWidth: number, buf: ArrayBuffer) {
-    let fd = new formData();
+    let fd = new FormData();
     fd.append("file", buf, {
       contentType: "application/octect-stream",
       filename: "file-upload",
