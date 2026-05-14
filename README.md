@@ -22,6 +22,9 @@ const bkn = new Backend("your-pub-key", "region");
 Only the `na1` region is supported. Your public key will be sent after you create 
 your account.
 
+Use `"dev"` for a local StaticBackend server at `http://localhost:8099`, or pass a
+self-hosted base URL as the second argument.
+
 ### Format
 
 The function calls, say to create a database document (all every other functions) 
@@ -47,6 +50,21 @@ if (result.ok) {
 For `login` and `register` the `content` field contains the user's session `token`.
 
 You'll need this token for all your interaction with the backend.
+
+### Server-side API
+
+This package is intended for trusted Node.js environments and includes root-token
+helpers that are not available in the browser client:
+
+- Database sudo operations: `sudoCreate`, `sudoList`, `sudoQuery`, `sudoUpdate`,
+  `sudoDelete`, `sudoListRepositories`, `sudoAddIndex`
+- Account helpers: `sudoGetToken`, `sudoGetAuthTokenByUserID`,
+  `sudoGetUserByID`, `sudoGetUserAccounts`
+- Storage and extras: `storageUsage`, `listFiles`, `deleteFile`, `sendMail`,
+  `sudoSendSMS`, `convertURLToX`
+- Functions, forms, and pub/sub: `addFunction`, `listFunctions`,
+  `updateFunction`, `deleteFunction`, `functionInfo`, `execFunction`,
+  `sudoExecFunction`, `listForm`, `publish`
 
 ## Development
 
@@ -75,4 +93,3 @@ npm test:watch
 ```
 
 See [tests/README.md](tests/README.md) for detailed testing documentation.
-
